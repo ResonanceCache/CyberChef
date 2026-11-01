@@ -51,6 +51,26 @@ const ML_DSA_44_PUBLIC_KEY = fs.readFileSync(
     "utf8"
 );
 
+const ML_DSA_65_CERT = fs.readFileSync(
+    new URL("../../samples/files/mldsa65.crt", import.meta.url),
+    "utf8"
+);
+
+const ML_DSA_65_PUBLIC_KEY = fs.readFileSync(
+    new URL("../../samples/files/mldsa65.pub", import.meta.url),
+    "utf8"
+);
+
+const ML_DSA_87_CERT = fs.readFileSync(
+    new URL("../../samples/files/mldsa87.crt", import.meta.url),
+    "utf8"
+);
+
+const ML_DSA_87_PUBLIC_KEY = fs.readFileSync(
+    new URL("../../samples/files/mldsa87.pub", import.meta.url),
+    "utf8"
+);
+
 TestRegister.addTests([
     {
         name: "Parse X.509 certificate: ML-KEM-512",
@@ -89,6 +109,50 @@ TestRegister.addTests([
         name: "Public Key from Certificate: ML-DSA-44",
         input: ML_DSA_44_CERT,
         expectedOutput: ML_DSA_44_PUBLIC_KEY.replace(/\r/g, "").replace(/\n/g, "\r\n"),
+        recipeConfig: [
+            {
+                op: "Public Key from Certificate",
+                args: [],
+            }
+        ],
+    },
+    {
+        name: "Parse X.509 certificate: ML-DSA-65",
+        input: ML_DSA_65_CERT,
+        expectedMatch: /Algorithm:\s+ML-DSA-65[\s\S]*Length:\s+15616 bits[\s\S]*Certificate Signature\n\s{2}Algorithm:\s+ML-DSA-65/,
+        recipeConfig: [
+            {
+                op: "Parse X.509 certificate",
+                args: ["PEM"],
+            }
+        ],
+    },
+    {
+        name: "Public Key from Certificate: ML-DSA-65",
+        input: ML_DSA_65_CERT,
+        expectedOutput: ML_DSA_65_PUBLIC_KEY.replace(/\r/g, "").replace(/\n/g, "\r\n"),
+        recipeConfig: [
+            {
+                op: "Public Key from Certificate",
+                args: [],
+            }
+        ],
+    },
+    {
+        name: "Parse X.509 certificate: ML-DSA-87",
+        input: ML_DSA_87_CERT,
+        expectedMatch: /Algorithm:\s+ML-DSA-87[\s\S]*Length:\s+20736 bits[\s\S]*Certificate Signature\n\s{2}Algorithm:\s+ML-DSA-87/,
+        recipeConfig: [
+            {
+                op: "Parse X.509 certificate",
+                args: ["PEM"],
+            }
+        ],
+    },
+    {
+        name: "Public Key from Certificate: ML-DSA-87",
+        input: ML_DSA_87_CERT,
+        expectedOutput: ML_DSA_87_PUBLIC_KEY.replace(/\r/g, "").replace(/\n/g, "\r\n"),
         recipeConfig: [
             {
                 op: "Public Key from Certificate",

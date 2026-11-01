@@ -15,6 +15,15 @@ const PQC_ALGORITHMS = {
     "2.16.840.1.101.3.4.4.3": "ML-KEM-1024",
 };
 
+const PQC_PUBLIC_KEY_BYTES = {
+    "ML-DSA-44": 1312,
+    "ML-DSA-65": 1952,
+    "ML-DSA-87": 2592,
+    "ML-KEM-512": 800,
+    "ML-KEM-768": 1184,
+    "ML-KEM-1024": 1568,
+};
+
 /**
  * Gets a standardized PQC algorithm name from an object identifier.
  *
@@ -53,6 +62,10 @@ export function getPqcPublicKeyInfo(cert) {
         const bitString = r.ASN1HEX.getV(publicKeyInfoHex, publicKeyInfoChildren[1]),
             unusedBits = parseInt(bitString.slice(0, 2), 16),
             publicKeyHex = bitString.slice(2);
+
+        if (publicKeyHex.length / 2 !== PQC_PUBLIC_KEY_BYTES[algorithm]) {
+            return undefined;
+        }
 
         return {
             algorithm,
